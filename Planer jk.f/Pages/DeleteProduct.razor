@@ -1,0 +1,56 @@
+﻿@page "/deleteProduct/{id}"
+@using Planer_jk.f.Data
+@inject ProductService productService
+@inject NavigationManager navigationManager
+
+<h3 class ="oi oi-list-rich" aria-hidden="true"> Löschen</h3>
+
+<div class="weißeLinie"> </div>
+
+<form>
+    <div class="row mt-2">
+        <input hidden class="form-control" @bind="@product.Id" />
+        <div class="col-md-8">
+            <lable class="control-label">Name</lable>
+            <input disabled class="form-controlll" @bind="@product.Aufgabe" />
+        </div>
+    </div>
+
+    <div class="lnfree"> </div>
+
+    <div class="row mt-2">
+        <div class="col-md-8">
+            <div class="form-group">
+                <button type="button" class="btn btn-danger" @onclick="@Delete">Löschen</button>
+                <button type="button" class="btn btn-secondary" @onclick="@Cancel">Zurück</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    Product product = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        product = await productService.GetProduct(Convert.ToInt32(Id));
+    }
+
+    protected async void Delete()
+    {
+        await productService.DeleteProduct(product);
+        navigationManager.NavigateTo("products");
+    }
+
+    void Cancel()
+    {
+        navigationManager.NavigateTo("products");
+    }
+}
+

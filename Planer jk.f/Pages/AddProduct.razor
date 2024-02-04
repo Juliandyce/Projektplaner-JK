@@ -1,0 +1,52 @@
+﻿@page "/addProduct"
+@using Planer_jk.f.Data
+@inject ProductService productService
+@inject NavigationManager navigationManager
+
+<h3 class ="oi oi-list-rich" aria-hidden="true"> Hinzufügen</h3>
+
+<div class="weißeLinie"> </div>
+
+<form>
+    <div class="row mt-2">
+        <div class="col-md-8">           
+            <lable class="control-label">Aufgabe</lable>
+            <input class="form-controlll" @bind="@newProduct.Aufgabe" />
+            <lable class="control-label">Beschreibung</lable>
+            <input class="form-controlll" @bind="@newProduct.Beschreibung" />
+            <lable class="control-label">geplante Erledigung</lable>
+            <input class="form-controlll" @bind="@newProduct.geplanteErledigung" />
+            <lable class="control-label">erledigt am</lable>
+            <input class="form-controlll" @bind="@newProduct.erledigtAm" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text">Benötigt Eingabe: (z.B.: -- )</div>
+
+        </div>
+    </div>
+
+    <div class="lnfree"> </div>
+
+    <div class="row mt-2">
+        <div class="col-md-8">
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" @onclick="@CreateProduct">Speichern</button>
+                <button type="button" class="btn btn-secondary" @onclick="@Cancel">Zurück</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    Product newProduct = new();
+
+    
+    protected async void CreateProduct()
+    {
+        await productService.InsertProduct(newProduct);
+        navigationManager.NavigateTo("products");
+    }
+    void Cancel()
+    {
+        navigationManager.NavigateTo("products");
+    }
+}
+

@@ -1,0 +1,61 @@
+﻿@page "/editProduct/{id}"
+@using Planer_jk.f.Data
+@inject ProductService productService
+@inject NavigationManager navigationManager
+
+<h3 class="oi oi-list-rich" aria-hidden="true"> Bearbeiten</h3>
+
+<div class="weißeLinie"> </div>
+
+<form>
+    <div class="row mt-2">
+        <input hidden class="form-control" @bind="@product.Id" />
+        <div class="col-md-8">
+            <lable class="control-label">Name</lable>
+            <input class="form-controlll" @bind="@product.Aufgabe" />
+            <lable class="control-label">Beschreibung</lable>
+            <input class="form-controlll" @bind="@product.Beschreibung" />
+            <lable class="control-label">geplante Erledigung</lable>
+            <input class="form-controlll" @bind="@product.geplanteErledigung" />
+            <lable class="control-label">erledigt am</lable>
+            <input class="form-controlll" @bind="@product.erledigtAm" />
+        </div>
+    </div>
+
+    <div class="lnfree"> </div>
+
+    <div class="row mt-2">
+        <div class="col-md-8">
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" @onclick="@UpdateProduct">Speichern</button>
+                <button type="button" class="btn btn-secondary" @onclick="@Cancel">Zurück</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    Product product = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        product = await productService.GetProduct(Convert.ToInt32(Id));
+    }
+
+    protected async void UpdateProduct()
+    {
+        await productService.UpdateProduct(product);
+        navigationManager.NavigateTo("products");
+    }
+
+    void Cancel()
+    {
+        navigationManager.NavigateTo("products");
+    }
+}

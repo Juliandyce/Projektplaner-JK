@@ -1,0 +1,61 @@
+﻿@page "/products"
+@using Planer_jk.f.Data
+@inject ProductService productService
+
+<div class="lnfree1"> </div>
+
+<h1 class="clr-light">Aufgabenliste</h1>
+
+<div class="lnfree"> </div>
+
+@if (allProducts == null)
+{
+    <p>Loading Data...</p>
+}
+else
+{
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                
+                <th>Aufgabe</th>
+                <th>Beschreibung</th>
+                <th>geplante Erledigung</th>
+                <th>erledigt am</th>
+                <th>Aktion</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Product product in allProducts)
+            {
+                <tr>
+
+                    <td>@product.Aufgabe</td>
+                    <td>@product.Beschreibung</td>
+                    <td>@product.geplanteErledigung</td>
+                    <td>@product.erledigtAm</td>
+                    <td>
+                        <a class="btn btn-sm btn-secondary" href="editProduct/@product.Id">Bearbeiten</a>
+                        <a class="btn btn-sm btn-danger" href="deleteProduct/@product.Id">Löschen</a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+            
+    </table>
+    <div class="d-grid gap-2">
+        <a href="addProduct" class="btn btn-purple">+ Hinzufügen</a>
+    </div>
+}
+
+@code {
+    List<Product>? allProducts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        allProducts = await productService.GetAllProducts();
+    }
+}
